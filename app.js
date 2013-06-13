@@ -22,6 +22,12 @@ app.configure(function(){
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.static(path.join(__dirname, 'public')));
+  app.use(function(err, req, res, next) {
+    if (err) res.send(500, 'Something went wrong')
+  })
+  app.use(function(req, res) {
+    res.send(404, 'Page Not Found')
+  })
 });
 
 app.configure('development', function(){
@@ -29,6 +35,7 @@ app.configure('development', function(){
 });
 
 app.get('/', routes.index)
+require('./routes/shows')(app)
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
