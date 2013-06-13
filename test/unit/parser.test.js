@@ -16,14 +16,14 @@ describe('parser', function() {
       assert.deepEqual(res, 
         [ { name: 'Miyakawa-ke no Kuufuku',
             season: 'Spring 13',
-            airtime: 'Monday 9:00PM',
+            airtime: 75600000,
             eps: '12',
             age: 3756060000,
             fetchedAt: fetchedAt
           },
           { name: 'Pocket Monsters Best Wishes Season 2 Decolora Adventure Da!',
             season: 'Spring 13',
-            airtime: 'Thursday 7:00PM',
+            airtime: 25200000,
             eps: '12',
             age: 4108860000,
             fetchedAt: fetchedAt
