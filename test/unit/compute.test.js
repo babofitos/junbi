@@ -24,5 +24,19 @@ describe('compute', function() {
       , nextAirDate: now+604800000
       })
     })
+
+    it('should put empty episodes as unknown', function() {
+      var now = 1371176769544
+      var show = {
+        name: 'Chinese Cartoon'
+      , season: 'Spring 2013'
+      , airtime: 25200000
+      , eps: ''
+      , age: 0
+      , fetchedAt: now
+      }
+      var deetz = compute.computeShowInfo(now, show)
+      assert.equal(deetz.eps, 'Unknown')
+    })
   })
 })

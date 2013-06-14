@@ -3,10 +3,17 @@ extends layout
 block content
   h1 Junbi
   table(ng-controller="ShowListCtrl")
-    thead Series
+    thead 
+      tr
+        th Show
+        th Season
+        th Episodes
+        th Airs in
+        th Airs on
     tbody
       tr(ng-repeat="show in shows")
         td {{show.name}}
         td {{show.season}}
-        td {{show.currentEp}} / {{show.eps}}
-        td {{show.nextAirDate}}
+        td {{show.currentEp}}/{{show.eps}}
+        td {{show.eta}}
+        td {{show.nextAirDateString}}

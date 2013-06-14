@@ -8,6 +8,7 @@ var express = require('express')
   , http = require('http')
   , path = require('path')
   , db = require('./lib/db')
+  , cronJob = require('cron').CronJob
 
 var app = express();
 
@@ -36,6 +37,11 @@ app.configure('development', function(){
 
 app.get('/', routes.index)
 require('./routes/shows')(app)
+
+//weekly parsing
+var fetchShows = new cronJob('00 00 00 * * 0-6', function() {
+  db.save()
+}, null, false).start()
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
