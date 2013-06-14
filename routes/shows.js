@@ -1,11 +1,13 @@
-var parser = require('../lib/recent-shows-parser')
-  , config = require('../config.json')
+var config = require('../config.json')
+  , db = require('../lib/db')
+  , helpers = require('../lib/helpers')
 
 module.exports = function(app) {
   app.get('/shows', function(req, res, next) {
-    parser(config, Date.now(), function(err, resp) {
+    //array of objects
+    db.all(function(err, data) {
       if (err) next(err)
-      res.json(resp)
+      res.json(data)
     })
   })
 }

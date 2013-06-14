@@ -37,42 +37,36 @@ describe('helpers', function() {
     })
   })
 
-  describe('.nextAirDate should always calculate a show 1 week from now', function() {
+  describe('.nextAirDate should return next air date of a show', function() {
     var now = Date.now()
       //next air date should always be todays date + 1 week from now
       , nextweek = Date.now() + 604800000
 
-    it('should calculate 0 week old show', function() {
+    it('should be next week from now if show aired right now', function() {
       var age = 0
 
-      assert.equal(helpers.nextAirDate(now, age, 0), nextweek)
+      assert.equal(helpers.nextAirDate(now, age, 1), nextweek)
     })
 
-    it('should calculate a 1 week show', function() {
+    it('should be today if show is exactly 1 week old show', function() {
       var age = 604800000
       
-      assert.equal(helpers.nextAirDate(now, age, 0), nextweek)
+      assert.equal(helpers.nextAirDate(now, age, 1), now)
     })
 
-    it("should calculate a cached 0 week old show that is currently 1 week old", function() {
-      var cachedAge = 0
-        , fetchedOneWeekAgo = now - 604800000
-
-      assert.equal(helpers.nextAirDate(now, cachedAge, fetchedOneWeekAgo), nextweek)
-    })
-
-    it('should calculate a cached 0 week old show that is currently 1 day old', function() {
-      var cachedAge = 86400000
-        , fetched1DayAgo = now - 86400000
-
-      assert.equal(helpers.nextAirDate(now, cachedAge, fetched1DayAgo), nextweek)
-    })
-
-    it('should calculate a cached 6 day old show that is currently 1 week old', function() {
+    it('should compensate for cached ages', function() {
+      //fetched last week, and last week it was 6 days old. so it premiered on Sat Jun 1st
       var cachedAge = 518400000
+        //Thur June 13 20:19:02
+        , now = 1371169142663
         , fetched6DaysAgo = now - 518400000
+        //its actual age is 12 days old
+        , actualAge = helpers.actualAge(now, cachedAge, fetched6DaysAgo)
+        , currentEp = helpers.calcCurrentEp(actualAge)
+        //next airing should be Sat June 15 20:19:02 or 2 days from now
+        , sat = now + 172800000
 
-      assert.equal(helpers.nextAirDate(now, cachedAge, fetched6DaysAgo), nextweek)
+      assert.equal(helpers.nextAirDate(now, actualAge, currentEp), sat)
     })
   })
 })
