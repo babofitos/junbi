@@ -4,29 +4,37 @@ var config = require('../../config.json')
   , mocha = require('mocha')
   , nock = require('nock')
   , path = require('path')
+  , helpers = require('../../lib/helpers')
 
 nock(config.host)
   .get(config.path)
   .replyWithFile(200, path.resolve(__dirname, 'mockhtmlresponse.html'))
+  
 describe('parser', function() {
   it('should return a list of all shows and its info', function(done) {
-    var fetchedAt = Date.now()
-    parser(config.url, fetchedAt, function(err, res) {
+    var now = 1371176769544
+      , resultsnow = now
+
+    if (new Date().getTimezoneOffset() === 240) {
+      resultsnow = resultsnow + 46800000
+    } else {
+      resultsnow = resultsnow + 43200000
+    }
+
+    parser(config.url, now, function(err, res) {
       assert.equal(err, null)
       assert.deepEqual(res, 
         [ { name: 'Miyakawa-ke no Kuufuku',
             season: 'Spring 13',
-            airtime: 75600000,
+            currentEp: 7,
             eps: '12',
-            age: 3756060000,
-            fetchedAt: fetchedAt
+            nextAirDate: helpers.nextAirDate(resultsnow, 3802860000, 7)
           },
           { name: 'Pocket Monsters Best Wishes Season 2 Decolora Adventure Da!',
             season: 'Spring 13',
-            airtime: 25200000,
+            currentEp: 7,
             eps: '12',
-            age: 4108860000,
-            fetchedAt: fetchedAt
+            nextAirDate: helpers.nextAirDate(resultsnow, 4155660000, 7)
           } 
         ]
       )

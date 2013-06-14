@@ -2,12 +2,11 @@ extends layout
 
 block content
   h1 Junbi
-  table
+  table(ng-controller="ShowListCtrl")
     thead Series
     tbody
-      tr
-        td Shingeki no Kyojin
-        td 2d:1h:2m:3s
-      tr
-        td Railgun S
-        td 2d:1h:2m:3s
+      tr(ng-repeat="show in shows")
+        td {{show.name}}
+        td {{show.season}}
+        td {{show.currentEp}} / {{show.eps}}
+        td {{show.nextAirDate}}
